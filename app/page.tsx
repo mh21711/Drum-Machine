@@ -1,95 +1,74 @@
-import Image from "next/image";
+"use client";
+import Drum from "./Drum";
 import styles from "./page.module.css";
+import { LiaFreeCodeCamp } from "react-icons/lia";
+import { AudioClip } from "./Types";
+
+const audioClip: AudioClip[] = [
+  {
+    keyTrigger: "Q",
+    id: "Heater-1",
+    url: "https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3"
+  }, {
+    keyTrigger: "W",
+    id: "Heater-2",
+    url: "https://s3.amazonaws.com/freecodecamp/drums/Heater-2.mp3"
+  }, {
+    keyTrigger: "E",
+    id: "Heater-3",
+    url: "https://s3.amazonaws.com/freecodecamp/drums/Heater-3.mp3"
+  }, {
+    keyTrigger: "A",
+    id: "Heater-4",
+    url: "https://s3.amazonaws.com/freecodecamp/drums/Heater-4_1.mp3"
+  }, {
+    keyTrigger: "S",
+    id: "Clap",
+    url: "https://s3.amazonaws.com/freecodecamp/drums/Heater-6.mp3"
+  }, {
+    keyTrigger: "D",
+    id: "Open-HH",
+    url: "https://s3.amazonaws.com/freecodecamp/drums/Dsc_Oh.mp3"
+  }, {
+    keyTrigger: "Z",
+    id: "Kick-n'-Hat",
+    url: "https://s3.amazonaws.com/freecodecamp/drums/Kick_n_Hat.mp3"
+  }, {
+    keyTrigger: "X",
+    id: "Kick",
+    url: "https://s3.amazonaws.com/freecodecamp/drums/RP4_KICK_1.mp3"
+  }, {
+    keyTrigger: "C",
+    id: "Closed-HH",
+    url: "https://s3.amazonaws.com/freecodecamp/drums/Cev_H2.mp3"
+  }
+];
 
 export default function Home() {
+  const AudioPlay = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const Clip = audioClip.find((clip) => clip.keyTrigger === e.key.toUpperCase())
+    if (!Clip) return;
+    (document.getElementById(Clip.keyTrigger) as HTMLAudioElement).play().catch(console.error)
+  
+    document.getElementById("drum-" + Clip?.keyTrigger)?.focus();
+    document.getElementById("show")!.innerHTML = Clip.id;
+  }  
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
+    <div id="drum-machine" className={styles.container} onKeyDown={AudioPlay}>
+      <div className={styles.drums}>
+        {audioClip.map((clip) => {
+          document.getElementById("drum-" + clip.keyTrigger)?.classList.add("drum-pad");
+          document.getElementById(clip.keyTrigger)?.classList.add("clip");
+          return <Drum Content={clip} key={clip.keyTrigger}/>
+        })}
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
+      <div className={styles.logo}>
+        <div>FCC&nbsp;</div>
+        <LiaFreeCodeCamp />
       </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <div id="display" className={styles.display}>
+        <div id="show" className={styles.Show}></div>
       </div>
-    </main>
+    </div>
   );
 }
