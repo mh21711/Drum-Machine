@@ -57,8 +57,6 @@ export default function Home() {
     <div id="drum-machine" className={styles.container} onKeyDown={AudioPlay}>
       <div className={styles.drums}>
         {audioClip.map((clip) => {
-          document.getElementById("drum-" + clip.keyTrigger)?.classList.add("drum-pad")
-          document.getElementById(clip.keyTrigger)?.classList.add("clip")
           return <Drum Content={clip} key={clip.keyTrigger}/>
         })}
       </div>
